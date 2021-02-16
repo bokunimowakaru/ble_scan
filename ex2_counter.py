@@ -58,7 +58,6 @@ while True:                                         # 永久ループ
 
 ''' 実行結果の一例
 pi@raspberrypi:~ $ cd ~/ble_sensor
-pi@raspberrypi:~/ble_sensor $ sudo ./ble_logger.py
 pi@raspberrypi:~/ble_sensor $ sudo ./ex2_counter.py
 1 Devices found, 6a:f9:xx:xx:xx:xx RSSI=-62
 2 Devices found, 5e:27:xx:xx:xx:xx RSSI=-56

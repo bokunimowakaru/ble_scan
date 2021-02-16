@@ -23,6 +23,8 @@ interval = 1.01                                 # 動作間隔(秒)
 
 from bluepy import btle                         # bluepyからbtleを組み込む
 from time import sleep                          # timeからsleepを組み込む
+from sys import argv
+import getpass
 
 def payval(num, bytes=1, sign=False):           # 受信データから値を抽出する
     global val                                  # 受信データ用変数valを読み込む
@@ -45,6 +47,12 @@ def printval(dict, name, n, unit):              # 受信値を表示する関数
         value = round(value,n)                  # 小数点以下第n位で丸める
     print('    ' + name + ' ' * (14 - len(name)) + '=', value, unit)    # 表示
 
+# 設定確認
+if getpass.getuser() != 'root':
+    print('使用方法: sudo', argv[0], '[対象MACアドレス(省略可)]...')
+    exit()
+
+# MAIN
 scanner = btle.Scanner()                        # インスタンスscannerを生成
 while True:                                     # 永久ループ
     # BLEスキャン

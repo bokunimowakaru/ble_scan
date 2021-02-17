@@ -82,4 +82,10 @@ HTTP port 80
 192.168.1.5 - - [17/Feb/2021 22:26:12] "GET / HTTP/1.1" 200 14
 counter = 3
 2 Devices found
+--------------------------------------------------------------------------------
+pi@raspberrypi:~ $ hostname -I
+192.168.1.5 XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX
+pi@raspberrypi:~ $ curl 192.168.1.5
+counter = None
+pi@raspberrypi:~ $
 '''

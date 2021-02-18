@@ -2,8 +2,8 @@
 # coding: utf-8
 
 ################################################################################
-# BLE Sensor ex3_server.py
-# 1分間に発見したBLEビーコン数をHTTPサーバでLAN内に配信します。
+# BLE Sensor ex4_ambient.py
+# 1分間に発見したBLEビーコン数をクラウドサービスAmbientに送信します。
 #
 #                                               Copyright (c) 2021 Wataru KUNINO
 ################################################################################
@@ -17,34 +17,30 @@
 #
 #【実行方法】
 #   実行するときは sudoを付与してください
-#       sudo ./ex3_server.py
+#       sudo ./ex4_ambient.py
 #
 #【参考文献】
 #   本プログラムを作成するにあたり下記を参考にしました
 #   https://ianharvey.github.io/bluepy-doc/scanner.html
 
+ambient_chid='0000'                 # ここにAmbientで取得したチャネルIDを入力
+ambient_wkey='0123456789abcdef'     # ここにはライトキーを入力
+amdient_tag='d1'                    # データ番号d1～d8のいずれかを入力
+
 interval = 1.01                                     # 動作間隔(秒)
-target_rssi = -80                                   # 最低受信強度
+target_rssi = -999                                  # 最低受信強度
 counter = None                                      # BLEビーコン発見数
 
-from wsgiref.simple_server import make_server       # WSGIサーバ
 from bluepy import btle                             # bluepyからbtleを組み込む
 from sys import argv                                # sysから引数取得を組み込む
 from getpass import getuser                         # ユーザ取得を組み込む
 from time import time                               # 時間取得を組み込む
-import threading                                    # スレッド管理を組み込む
+import urllib.request                               # HTTP通信を組み込む
+import json                                         # JSON変換を組み込む
 
-def wsgi_app(environ, start_response):              # HTTPアクセス受信時の処理
-    res = 'counter = ' + str(counter) + '\r\n'      # 応答文を作成
-    print(res, end='')                              # 応答文を表示
-    res = res.encode('utf-8')                       # バイト列へ変換
-    start_response('200 OK', [('Content-type', 'text/plain; charset=utf-8')])
-    return [res]                                    # 応答メッセージを返却
-
-def httpd(port = 80):
-    htserv = make_server('', port, wsgi_app)        # HTTPサーバ実体化
-    print('HTTP port', port)                        # ポート番号を表示
-    htserv.serve_forever()                          # HTTPサーバを起動
+url_s = 'https://ambidata.io/api/v2/channels/'+ambient_chid+'/data' # アクセス先
+head = {'Content-Type':'application/json'}          # ヘッダを辞書型変数headへ
+body = {'writeKey':ambient_wkey, amdient_tag:0.0}   # 内容を辞書型変数bodyへ
 
 if getuser() != 'root':                             # 実行したユーザがroot以外
     print('使用方法: sudo', argv[0])                # 使用方法の表示
@@ -53,9 +49,7 @@ if getuser() != 'root':                             # 実行したユーザがro
 time_prev = time()                                  # 現在の時間を変数に保持
 MAC = list()                                        # アドレス保存用の配列変数
 scanner = btle.Scanner()                            # インスタンスscannerを生成
-thread = threading.Thread(target=httpd, daemon=True)# スレッドhttpdの実体化
-thread.start()                                      # スレッドhttpdの起動
-while thread.is_alive:                              # 永久ループ(httpd動作中)
+while True:                                         # 永久ループ
     devices = scanner.scan(interval)                # BLEアドバタイジング取得
     for dev in devices:                             # 発見した各デバイスについて
         if dev.rssi < target_rssi:                  # 受信強度が-80より小さい時
@@ -66,25 +60,23 @@ while thread.is_alive:                              # 永久ループ(httpd動�
     if time_prev + 30 < time():                     # 30秒以上経過した時
         counter = len(MAC)                          # 発見済みデバイス数を保持
         print(counter, 'Counts/minute')             # カウンタ値を表示
+        body[amdient_tag] = counter                 # カウンタ値をbodyへ代入
+        post = urllib.request.Request(url_s, json.dumps(body).encode(), head)
+        try:                                        # 例外処理の監視を開始
+            urllib.request.urlopen(post)            # HTTPアクセスを実行
+        except Exception as e:                      # 例外処理発生時
+            print(e,url_s)                          # エラー内容と変数url_s表示
         MAC = list()                                # アドレスを廃棄
         time_prev = time()                          # 現在の時間を変数に保持
 
 ''' 実行結果の一例
 pi@raspberrypi:~ $ cd ~/ble_sensor
-pi@raspberrypi:~/ble_sensor $ sudo ./ex3_server.py
-HTTP port 80
+pi@raspberrypi:~/ble_sensor $ sudo ./ex4_ambient.py
 1 Devices found
 2 Devices found
 3 Devices found
 3 Counts/minute
 1 Devices found
-192.168.1.5 - - [17/Feb/2021 22:26:12] "GET / HTTP/1.1" 200 14
-counter = 3
 2 Devices found
---------------------------------------------------------------------------------
-pi@raspberrypi:~ $ hostname -I
-192.168.1.5 XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX
-pi@raspberrypi:~ $ curl 192.168.1.5
-counter = None
-pi@raspberrypi:~ $
+2 Counts/minute
 '''

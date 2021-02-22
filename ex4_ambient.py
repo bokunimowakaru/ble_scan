@@ -13,7 +13,7 @@
 #       sudo pip3 install bluepy
 #
 #   サンプル・プログラム集をダウンロードして下さい。
-#       git clone https://bokunimo.net/git/ble_sensor
+#       git clone https://bokunimo.net/git/ble_scan
 #
 #【実行方法】
 #   実行するときは sudoを付与してください
@@ -71,8 +71,8 @@ while True:                                         # 永久ループ
         time_prev = time()                          # 現在の時間を変数に保持
 
 ''' 実行結果の一例
-pi@raspberrypi:~ $ cd ~/ble_sensor
-pi@raspberrypi:~/ble_sensor $ sudo ./ex4_ambient.py
+pi@raspberrypi:~ $ cd ~/ble_scan
+pi@raspberrypi:~/ble_scan $ sudo ./ex4_ambient.py
 1 Devices found
 2 Devices found
 3 Devices found

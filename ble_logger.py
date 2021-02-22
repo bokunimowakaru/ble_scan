@@ -79,9 +79,9 @@ while True:                                         # 永久ループ
 
 ''' 実行結果の一例
 pi@raspberrypi:~ $ cd
-pi@raspberrypi:~ $ git clone https://bokunimo.net/git/ble_sensor
-pi@raspberrypi:~ $ cd ~/ble_sensor
-pi@raspberrypi:~/ble_sensor $ sudo ./ble_logger.py
+pi@raspberrypi:~ $ git clone https://bokunimo.net/git/ble_scan
+pi@raspberrypi:~ $ cd ~/ble_scan
+pi@raspberrypi:~/ble_scan $ sudo ./ble_logger.py
 
 Device 72:3b:xx:xx:xx:xx (random), RSSI=-60
 +----+--------------------------+----------------------------

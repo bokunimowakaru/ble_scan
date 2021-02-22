@@ -1,4 +1,4 @@
-# ble_sensor
+# ble_scan
 BLE Beacon Density Sensor
 
-git clone https://bokunimo.net/git/ble_sensor
+git clone https://bokunimo.net/git/ble_scan

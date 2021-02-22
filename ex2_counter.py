@@ -14,7 +14,7 @@
 #       sudo pip3 install bluepy
 #
 #   サンプル・プログラム集をダウンロードして下さい。
-#       git clone https://bokunimo.net/git/ble_sensor
+#       git clone https://bokunimo.net/git/ble_scan
 #
 #【実行方法】
 #   実行するときは sudoを付与してください
@@ -49,8 +49,8 @@ while True:                                         # 永久ループ
         print('RSSI=' + str(dev.rssi))              # 受信強度RSSIを表示
 
 ''' 実行結果の一例
-pi@raspberrypi:~ $ cd ~/ble_sensor
-pi@raspberrypi:~/ble_sensor $ sudo ./ex2_counter.py
+pi@raspberrypi:~ $ cd ~/ble_scan
+pi@raspberrypi:~/ble_scan $ sudo ./ex2_counter.py
 1 Devices found, 6a:f9:xx:xx:xx:xx, RSSI=-62
 2 Devices found, 5e:27:xx:xx:xx:xx, RSSI=-56
 2 Devices found, 5e:27:xx:xx:xx:xx, RSSI=-57

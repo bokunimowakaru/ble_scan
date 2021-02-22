@@ -13,7 +13,7 @@
 #       sudo pip3 install bluepy
 #
 #   サンプル・プログラム集をダウンロードして下さい。
-#       git clone https://bokunimo.net/git/ble_sensor
+#       git clone https://bokunimo.net/git/ble_scan
 #
 #【実行方法】
 #   実行するときは sudoを付与してください
@@ -70,8 +70,8 @@ while thread.is_alive:                              # 永久ループ(httpd動�
         time_prev = time()                          # 現在の時間を変数に保持
 
 ''' 実行結果の一例
-pi@raspberrypi:~ $ cd ~/ble_sensor
-pi@raspberrypi:~/ble_sensor $ sudo ./ex3_server.py
+pi@raspberrypi:~ $ cd ~/ble_scan
+pi@raspberrypi:~/ble_scan $ sudo ./ex3_server.py
 HTTP port 80
 1 Devices found
 2 Devices found

@@ -13,7 +13,7 @@
 #       sudo pip3 install bluepy
 #
 #   サンプル・プログラム集をダウンロードして下さい。
-#       git clone https://bokunimo.net/git/ble_sensor
+#       git clone https://bokunimo.net/git/ble_scan
 #
 #【実行方法】
 #   実行するときは sudoを付与してください
@@ -44,8 +44,8 @@ while True:                                         # 永久ループ
             print('\t', d[0], d[1], '=', d[2])      # アドバタイズType番号,名,値
 
 ''' 実行結果の一例
-pi@raspberrypi:~ $ cd ~/ble_sensor
-pi@raspberrypi:~/ble_sensor $ sudo ./ex1_scan.py
+pi@raspberrypi:~ $ cd ~/ble_scan
+pi@raspberrypi:~/ble_scan $ sudo ./ex1_scan.py
 
 Address = 72:3b:xx:xx:xx:xx, AddrType = random, RSSI = -60
 		3 Complete 16b Services = 0000fd6f-0000-1000-8000-00805f9b34fb

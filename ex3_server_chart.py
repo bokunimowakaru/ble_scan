@@ -2,7 +2,7 @@
 # coding: utf-8
 
 ################################################################################
-# BLE Sensor ex3_server.py
+# BLE Sensor ex3_server_chart.py [棒グラフ機能付き]
 # 1分間に発見したBLEビーコン数をHTTPサーバでLAN内に配信します。
 #
 #                                               Copyright (c) 2021 Wataru KUNINO

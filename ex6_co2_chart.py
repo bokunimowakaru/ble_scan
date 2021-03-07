@@ -2,7 +2,7 @@
 # coding: utf-8
 
 ################################################################################
-# BLE Sensor ex6_co2.py
+# BLE Sensor ex6_co2_chart.py [棒グラフ機能付き]
 # ex3_server.py に CO2センサ(SENSIRION SGP30)を追加します。
 #
 #                                               Copyright (c) 2021 Wataru KUNINO

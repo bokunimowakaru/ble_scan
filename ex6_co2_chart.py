@@ -33,13 +33,13 @@
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
 sgp30 = 0x58                                        # センサSGP30のI2Cアドレス
-counter = None                                      # BLEビーコン発見数
-co2 = 0                                             # 推定CO2濃度
-tvoc = 0                                            # TVOC濃度
-Res_Html = [('Content-type', 'text/html; charset=utf-8')]
-Res_Text = [('Content-type', 'text/plain; charset=utf-8')]
-Res_200 = '200 OK'
-Res_404 = '404 Not Found'
+counter = -1                                        # BLEビーコン発見数
+co2 = -1                                            # 推定CO2濃度
+tvoc = -1                                           # TVOC濃度
+Res_Html = [('Content-type', 'text/html; charset=utf-8')]   # HTMLコンテンツ
+Res_Text = [('Content-type', 'text/plain; charset=utf-8')]  # TXTコンテンツ
+Res_200 = '200 OK'                                  # HTTPステータスコード 200
+Res_404 = '404 Not Found'                           # HTTPステータスコード 400
 
 from wsgiref.simple_server import make_server       # WSGIサーバ
 from bluepy import btle                             # bluepyからbtleを組み込む
@@ -53,7 +53,7 @@ import smbus                                        # SMBus(I2C)管理を組み�
 def barChartHtml(name, val, max, color='green'):    # 棒グラフHTMLを作成する関数
     html = '<tr><td>' + name + '</td>\n'            # 棒グラフ名を表示
     html += '<td align="right">'+str(val)+'</td>\n' # 変数valの値を表示
-    if val is None:                                 # 数値が代入されていないとき
+    if val < 0:                                     # valが負の値のとき
         html += '<td>no data</td>\n'                # no data を追加
         return html                                 # HTMLデータを返却
     i= round(200 * val / max)                       # 棒グラフの長さを計算
@@ -77,10 +77,10 @@ def wsgi_app(environ, start_response):              # HTTPアクセス受信時�
     html += '<tr><th>項目</th><th width=50>値</th>' # 「項目」「値」を表示
     html += '<th width=200>グラフ</th>\n'           # 「グラフ」を表示
     html += barChartHtml('Counter', counter, 10)    # カウント値を棒グラフ化
-    html += barChartHtml('CO2',co2, 1000)
-    html += barChartHtml('TVOD',tvod, 1000)
+    html += barChartHtml('CO2', co2, 1000)          # 推定CO2濃度を棒グラフ化
+    html += barChartHtml('TVOC', tvoc, 100)         # TVOC濃度を棒グラフ化
     html += '</tr>\n</table>\n</body>\n</html>\n'   # 作表とhtmlの終了
-    start_response(Res_200, Res_Html)
+    start_response(Res_200, Res_Html)               # 応答ヘッダを設定
     return [html.encode('utf-8')]                   # 応答メッセージを返却
 
 def httpd(port = 80):
@@ -133,39 +133,3 @@ while thread.is_alive:                              # 永久ループ(httpd動�
         print("TVOC= %d ppb" % tvoc)                # tvodを表示
         MAC = list()                                # アドレスを廃棄
         time_prev = time()                          # 現在の時間を変数に保持
-
-''' 実行結果の一例
-pi@raspberrypi:~ $ cd ~/ble_scan
-pi@raspberrypi:~/ble_scan $ sudo ./ex6_co2.py
-HTTP port 80
-1 Devices found
-2 Devices found
-3 Devices found
-4 Devices found
-5 Devices found
-5 Counts/minute, CO2 = 402 ppm, TVOC= 1 ppb
-1 Devices found
-192.168.1.5 - - [07/Mar/2021 18:58:20] "GET / HTTP/1.1" 200 36
-counter = 5
-co2 = 402
-tvoc = 1
-2 Devices found
-3 Devices found
-192.168.1.5 - - [07/Mar/2021 18:58:30] "GET / HTTP/1.1" 200 36
-counter = 5
-co2 = 464
-tvoc = 219
-
---------------------------------------------------------------------------------
-pi@raspberrypi:~ $ hostname -I
-192.168.1.5 XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX
-pi@raspberrypi:~ $ curl 192.168.1.5
-counter = 5
-co2 = 402
-tvoc = 1
-pi@raspberrypi:~ $ curl 192.168.1.5
-counter = 5
-co2 = 464
-tvoc = 219
-pi@raspberrypi:~ $
-'''

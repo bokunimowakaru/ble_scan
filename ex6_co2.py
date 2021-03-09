@@ -34,8 +34,8 @@ interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
 sgp30 = 0x58                                        # センサSGP30のI2Cアドレス
 counter = None                                      # BLEビーコン発見数
-co2 = 0                                             # 推定CO2濃度
-tvoc = 0                                            # TVOC濃度
+co2 = None                                          # 推定CO2濃度
+tvoc = None                                         # TVOC濃度
 
 from wsgiref.simple_server import make_server       # WSGIサーバ
 from bluepy import btle                             # bluepyからbtleを組み込む

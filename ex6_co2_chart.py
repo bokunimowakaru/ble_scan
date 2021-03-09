@@ -33,9 +33,9 @@
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
 sgp30 = 0x58                                        # センサSGP30のI2Cアドレス
-counter = -1                                        # BLEビーコン発見数
-co2 = -1                                            # 推定CO2濃度
-tvoc = -1                                           # TVOC濃度
+counter = 0                                         # BLEビーコン発見数
+co2 = 0                                             # 推定CO2濃度
+tvoc = 0                                            # TVOC濃度
 Res_Html = [('Content-type', 'text/html; charset=utf-8')]   # HTMLコンテンツ
 Res_Text = [('Content-type', 'text/plain; charset=utf-8')]  # TXTコンテンツ
 Res_200 = '200 OK'                                  # HTTPステータスコード 200
@@ -53,9 +53,6 @@ import smbus                                        # SMBus(I2C)管理を組み�
 def barChartHtml(name, val, max, color='green'):    # 棒グラフHTMLを作成する関数
     html = '<tr><td>' + name + '</td>\n'            # 棒グラフ名を表示
     html += '<td align="right">'+str(val)+'</td>\n' # 変数valの値を表示
-    if val < 0:                                     # valが負の値のとき
-        html += '<td>no data</td>\n'                # no data を追加
-        return html                                 # HTMLデータを返却
     i= round(200 * val / max)                       # 棒グラフの長さを計算
     if val >= max * 0.75:                           # 75％以上のとき
         color = 'red'                               # 棒グラフの色を赤に

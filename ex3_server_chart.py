@@ -25,7 +25,7 @@
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
-counter = -1                                        # BLEビーコン発見数
+counter = 0                                         # BLEビーコン発見数
 Res_Html = [('Content-type', 'text/html; charset=utf-8')]   # HTMLコンテンツ
 Res_Text = [('Content-type', 'text/plain; charset=utf-8')]  # TXTコンテンツ
 Res_200 = '200 OK'                                  # HTTPステータスコード 200
@@ -41,9 +41,6 @@ import threading                                    # スレッド管理を組�
 def barChartHtml(name, val, max, color='green'):    # 棒グラフHTMLを作成する関数
     html = '<tr><td>' + name + '</td>\n'            # 棒グラフ名を表示
     html += '<td align="right">'+str(val)+'</td>\n' # 変数valの値を表示
-    if val < 0:                                     # valが負の値のとき
-        html += '<td>no data</td>\n'                # no data を追加
-        return html                                 # HTMLデータを返却
     i= round(200 * val / max)                       # 棒グラフの長さを計算
     if val >= max * 0.75:                           # 75％以上のとき
         color = 'red'                               # 棒グラフの色を赤に

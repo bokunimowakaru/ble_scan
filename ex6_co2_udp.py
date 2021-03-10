@@ -175,4 +175,4 @@ while thread.is_alive:                              # 永久ループ(httpd動�
             sock.sendto(udp_bytes,(udp_to,udp_port)) # UDPブロードキャスト送信
         except Exception as e:                      # 例外処理発生時
             print(e)                                # エラー内容を表示
-        sock.close()                                # ソケットの切断
+sock.close()                                        # ソケットの切断

@@ -34,7 +34,7 @@ interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
 sgp30 = 0x58                                        # センサSGP30のI2Cアドレス
 counter = 0                                         # BLEビーコン発見数
-temp_offset = 0                                     # 温度補正値
+temp_offset = 15                                    # 温度補正値
 temp = 0                                            # 温度値
 co2 = 0                                             # 推定CO2濃度
 tvoc = 0                                            # TVOC濃度
@@ -137,7 +137,7 @@ try:                                                # 例外処理の監視を�
 except Exception as e:                              # 例外処理発生時
     print(e)                                        # エラー内容の表示
     exit()                                          # プログラムの終了
-tempSensor.offset += temp_offset                    # 温度補正値を加算する
+tempSensor.offset = temp_offset                     # 温度補正値を修正する
 
 i2c = smbus.SMBus(1)                                # I2Cバス1を実体化
 i2c.write_byte_data(sgp30, 0x20, 0x03)              # SGP30の初期設定を実行

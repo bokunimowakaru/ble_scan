@@ -168,7 +168,7 @@ while thread.is_alive:                              # 永久ループ(httpd動�
         MAC = list()                                # アドレスを廃棄
         time_prev = time()                          # 現在の時間を変数に保持
         udp_s = device_s + ', ' + str(temp) + ', 0, 0, '
-        udp_s = str(co2) + ', ' + str(tvoc) + ', ' + str(counter)
+        udp_s += str(co2) + ', ' + str(tvoc) + ', ' + str(counter)
         print('send :', udp_s)                      # 受信データを出力
         udp_bytes = (udp_s + '\n').encode()         # バイト列に変換
         try:                                        # 作成部

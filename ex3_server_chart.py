@@ -26,10 +26,6 @@
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
 counter = 0                                         # BLEビーコン発見数
-Res_Html = [('Content-type', 'text/html; charset=utf-8')]   # HTMLコンテンツ
-Res_Text = [('Content-type', 'text/plain; charset=utf-8')]  # TXTコンテンツ
-Res_200 = '200 OK'                                  # HTTPステータスコード 200
-Res_404 = '404 Not Found'                           # HTTPステータスコード 400
 
 from wsgiref.simple_server import make_server       # WSGIサーバ
 from bluepy import btle                             # bluepyからbtleを組み込む
@@ -53,8 +49,8 @@ def barChartHtml(name, val, max, color='green'):    # 棒グラフHTMLを作成�
 def wsgi_app(environ, start_response):              # HTTPアクセス受信時の処理
     path  = environ.get('PATH_INFO')                # リクエスト先のパスを代入
     if path != '/':                                 # パスがルート以外のとき
-        start_response(Res_404, Res_Text)           # 404エラー設定
-        return [Res_404.encode()]                   # 応答メッセージ(404)を返却
+        start_response('404 Not Found',[])          # 404エラー設定
+        return ['404 Not Found'.encode()]           # 応答メッセージ(404)を返却
     html = '<html>\n<head>\n'                       # HTMLコンテンツを作成
     html += '<meta http-equiv="refresh" content="10;">\n'   # 自動再読み込み
     html += '</head>\n<body>\n'                     # 以下は本文
@@ -63,7 +59,7 @@ def wsgi_app(environ, start_response):              # HTTPアクセス受信時�
     html += '<th width=200>グラフ</th>\n'           # 「グラフ」を表示
     html += barChartHtml('Counter', counter, 10)    # カウント値を棒グラフ化
     html += '</tr>\n</table>\n</body>\n</html>\n'   # 作表とhtmlの終了
-    start_response(Res_200, Res_Html)               # 応答ヘッダを設定
+    start_response('200 OK', [('Content-type', 'text/html; charset=utf-8')])
     return [html.encode('utf-8')]                   # 応答メッセージを返却
 
 def httpd(port = 80):

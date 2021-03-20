@@ -26,15 +26,18 @@
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
+counter = None                                      # BLEビーコン発見数
 
 from bluepy import btle                             # bluepyからbtleを組み込む
 from sys import argv                                # sysから引数取得を組み込む
 from getpass import getuser                         # ユーザ取得を組み込む
+from time import time                               # 時間取得を組み込む
 
 if getuser() != 'root':                             # 実行したユーザがroot以外
     print('使用方法: sudo', argv[0])                # 使用方法の表示
     exit()                                          # プログラムの終了
 
+time_prev = time()                                  # 現在の時間を変数に保持
 MAC = list()                                        # アドレス保存用の配列変数
 scanner = btle.Scanner()                            # インスタンスscannerを生成
 while True:                                         # 永久ループ
@@ -47,6 +50,11 @@ while True:                                         # 永久ループ
         print(len(MAC), 'Devices found', end=', ')  # 発見済みデバイス数を表示
         print(dev.addr, end=', ')                   # アドレスを表示
         print('RSSI=' + str(dev.rssi))              # 受信強度RSSIを表示
+    if time_prev + 30 < time():                     # 30秒以上経過した時
+        counter = len(MAC)                          # 発見済みデバイス数を保持
+        print(counter * 2, 'Counts/minute')         # カウンタ値を表示
+        MAC = list()                                # アドレスを廃棄
+        time_prev = time()                          # 現在の時間を変数に保持
 
 ''' 実行結果の一例
 pi@raspberrypi:~ $ cd ~/ble_scan
@@ -57,4 +65,5 @@ pi@raspberrypi:~/ble_scan $ sudo ./ex2_counter.py
 3 Devices found, f8:80:xx:xx:xx:xx, RSSI=-80
 4 Devices found, 73:6a:xx:xx:xx:xx, RSSI=-72
 4 Devices found, 6a:f9:xx:xx:xx:xx, RSSI=-62
+8 Counts/minute
 '''

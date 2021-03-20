@@ -79,7 +79,7 @@ HTTP port 80
 6 Counts/minute
 1 Devices found
 192.168.1.5 - - [17/Feb/2021 22:26:12] "GET / HTTP/1.1" 200 14
-counter = 3
+counter = 6
 2 Devices found
 --------------------------------------------------------------------------------
 pi@raspberrypi:~ $ hostname -I

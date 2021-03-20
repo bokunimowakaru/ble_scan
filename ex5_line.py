@@ -70,12 +70,12 @@ while True:                                         # 永久ループ
             MAC.append(dev.addr)                    # 配列変数にアドレスを追加
             print(len(MAC), 'Devices found')        # 発見済みデバイス数を表示
     if time_prev + 30 < time():                     # 30秒以上経過した時
-        counter = len(MAC)                          # 発見済みデバイス数を保持
-        print(counter, 'Counts/minute')             # カウンタ値を表示
+        counter = len(MAC) * 2                      # 分あたりの発見機器数を保持
+        print(counter, 'Counts/minute')             # カウンタ値(分あたり)を表示
         MAC = list()                                # アドレスを廃棄
         time_prev = time()                          # 現在の時間を変数に保持
         if counter >= alart_n:                      # カウンタ値が5以上のとき
-            body = 'message=密集度は ' + str(counter) + ' です。'
+            body = 'message=密集度は ' + str(counter) + ' cpm です。'
             print(body)                             # メッセージを表示
             post = urllib.request.Request(url_s, body.encode(), head)
             try:                                    # 例外処理の監視を開始
@@ -89,7 +89,7 @@ pi@raspberrypi:~/ble_scan $ sudo ./ex5_line.py
 1 Devices found
 2 Devices found
 3 Devices found
-3 Counts/minute
+6 Counts/minute
 message=密集度は 3 です。
 1 Devices found
 2 Devices found
@@ -98,6 +98,6 @@ message=密集度は 3 です。
 2 Devices found
 3 Devices found
 4 Devices found
-4 Counts/minute
+8 Counts/minute
 message=密集度は 4 です。
 '''

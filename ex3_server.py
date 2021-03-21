@@ -25,7 +25,7 @@
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
-counter = None                                      # BLEビーコン発見数
+counter = None                                      # BLEビーコン発見数(cpm)
 
 from wsgiref.simple_server import make_server       # WSGIサーバ
 from bluepy import btle                             # bluepyからbtleを組み込む

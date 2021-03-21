@@ -29,7 +29,7 @@ amdient_tag='d1'                    # データ番号d1～d8のいずれかを�
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -999                                  # 最低受信強度
-counter = None                                      # BLEビーコン発見数
+counter = None                                      # BLEビーコン発見数(cpm)
 
 from bluepy import btle                             # bluepyからbtleを組み込む
 from sys import argv                                # sysから引数取得を組み込む

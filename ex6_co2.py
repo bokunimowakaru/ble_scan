@@ -33,7 +33,7 @@
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
 sgp30 = 0x58                                        # センサSGP30のI2Cアドレス
-counter = None                                      # BLEビーコン発見数
+counter = None                                      # BLEビーコン発見数(cpm)
 co2 = None                                          # 推定CO2濃度
 tvoc = None                                         # TVOC濃度
 

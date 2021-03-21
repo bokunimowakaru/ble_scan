@@ -40,7 +40,7 @@ line_token='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -999                                  # 最低受信強度
-counter = None                                      # BLEビーコン発見数
+counter = None                                      # BLEビーコン発見数(cpm)
 alart_n = 3                                         # LINE送信閾値
 
 from bluepy import btle                             # bluepyからbtleを組み込む

@@ -34,6 +34,8 @@ interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
 sgp30 = 0x58                                        # センサSGP30のI2Cアドレス
 counter = 0                                         # BLEビーコン発見数
+temp_offset = 15                                    # 温度補正値
+temp = 0                                            # 温度値
 co2 = 0                                             # 推定CO2濃度
 tvoc = 0                                            # TVOC濃度
 
@@ -45,6 +47,26 @@ from time import time                               # 時間取得を組み込�
 from time import sleep                              # スリープ機能を組み込む
 import threading                                    # スレッド管理を組み込む
 import smbus                                        # SMBus(I2C)管理を組み込む
+
+class TempSensor:                                       # クラスTempSensorの定義
+    _filename = '/sys/class/thermal/thermal_zone0/temp' # デバイスのファイル名
+    try:                                                # 例外処理の監視を開始
+        fp = open(_filename)                            # ファイルを開く
+    except Exception as e:                              # 例外処理発生時
+        raise Exception('SensorDeviceNotFound')         # 例外を応答
+    def __init__(self):                                 # コンストラクタ作成
+        self.offset = float(30.0)                       # 温度センサ補正用
+        self.value = float()                            # 測定結果の保持用
+    def get(self):                                      # 温度値取得用メソッド
+        self.fp.seek(0)                                 # 温度ファイルの先頭へ
+        val = float(self.fp.read()) / 1000              # 温度センサから取得
+        val -= self.offset                              # 温度を補正
+        val = round(val,1)                              # 丸め演算
+        self.value = val                                # 測定結果を保持
+        return val                                      # 測定結果を応答
+    def __del__(self):                                  # インスタンスの削除
+        self.fp.close()                                 # ファイルを閉じる
+
 
 def barChartHtml(name, val, max, color='green'):    # 棒グラフHTMLを作成する関数
     html = '<tr><td>' + name + '</td>\n'            # 棒グラフ名を表示
@@ -69,6 +91,7 @@ def wsgi_app(environ, start_response):              # HTTPアクセス受信時�
     html += '<table border=1>\n'                    # 作表を開始
     html += '<tr><th>項目</th><th width=50>値</th>' # 「項目」「値」を表示
     html += '<th width=200>グラフ</th>\n'           # 「グラフ」を表示
+    html += barChartHtml('Temperature', temp, 40)   # カウント値を棒グラフ化
     html += barChartHtml('Counter', counter, 10)    # カウント値を棒グラフ化
     html += barChartHtml('CO2', co2, 1000)          # 推定CO2濃度を棒グラフ化
     html += barChartHtml('TVOC', tvoc, 100)         # TVOC濃度を棒グラフ化
@@ -99,6 +122,12 @@ def getCo2():                                       # SGP30からCO2とTVOCを�
 if getuser() != 'root':                             # 実行したユーザがroot以外
     print('使用方法: sudo', argv[0])                # 使用方法の表示
     exit()                                          # プログラムの終了
+try:                                                # 例外処理の監視を開始
+    tempSensor = TempSensor()                       # 温度センサの実体化
+except Exception as e:                              # 例外処理発生時
+    print(e)                                        # エラー内容の表示
+    exit()                                          # プログラムの終了
+tempSensor.offset = temp_offset                     # 温度補正値を修正する
 
 i2c = smbus.SMBus(1)                                # I2Cバス1を実体化
 i2c.write_byte_data(sgp30, 0x20, 0x03)              # SGP30の初期設定を実行
@@ -113,6 +142,7 @@ thread.start()                                      # スレッドhttpdの起動
 while thread.is_alive:                              # 永久ループ(httpd動作中)
     devices = scanner.scan(interval)                # BLEアドバタイジング取得
     (co2, tvoc) = getCo2()                          # SGP30からCO2とTVOCを取得
+    temp = round(tempSensor.get())                  # Raspberry Piの温度値を取得
     for dev in devices:                             # 発見した各デバイスについて
         if dev.rssi < target_rssi:                  # 受信強度が-80より小さい時
             continue                                # forループの先頭に戻る
@@ -122,6 +152,7 @@ while thread.is_alive:                              # 永久ループ(httpd動�
     if time_prev + 30 < time():                     # 30秒以上経過した時
         counter = len(MAC)                          # 発見済みデバイス数を保持
         print(counter, 'Counts/30sec.', end = ', ') # カウンタ値(30秒あたり)表示
+        print('Temp = %d ℃' % temp, end = ', ')    # tempを表示
         print('CO2 = %d ppm' % co2, end = ', ')     # co2を表示
         print("TVOC= %d ppb" % tvoc)                # tvodを表示
         MAC = list()                                # アドレスを廃棄

@@ -120,7 +120,7 @@ while thread.is_alive:                              # 永久ループ(httpd動�
             MAC.append(dev.addr)                    # 配列変数にアドレスを追加
             print(len(MAC), 'Devices found')        # 発見済みデバイス数を表示
     if time_prev + 30 < time():                     # 30秒以上経過した時
-        counter = len(MAC)                          # 発見機器数を保持
+        counter = len(MAC)                          # 発見済みデバイス数を保持
         print(counter, 'Counts/30sec.', end = ', ') # カウンタ値(30秒あたり)表示
         print('CO2 = %d ppm' % co2, end = ', ')     # co2を表示
         print("TVOC= %d ppb" % tvoc)                # tvodを表示

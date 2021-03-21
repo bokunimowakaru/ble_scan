@@ -70,7 +70,7 @@ while True:                                         # 永久ループ
             MAC.append(dev.addr)                    # 配列変数にアドレスを追加
             print(len(MAC), 'Devices found')        # 発見済みデバイス数を表示
     if time_prev + 30 < time():                     # 30秒以上経過した時
-        counter = len(MAC)                          # 発見機器数を保持
+        counter = len(MAC)                          # 発見済みデバイス数を保持
         print(counter, 'Counts/30seconds')          # カウンタ値(30秒あたり)表示
         MAC = list()                                # アドレスを廃棄
         time_prev = time()                          # 現在の時間を変数に保持

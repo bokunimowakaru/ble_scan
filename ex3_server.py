@@ -25,7 +25,7 @@
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
-counter = None                                      # BLEビーコン発見数(cpm)
+counter = None                                      # BLEビーコン発見数
 
 from wsgiref.simple_server import make_server       # WSGIサーバ
 from bluepy import btle                             # bluepyからbtleを組み込む
@@ -64,8 +64,8 @@ while thread.is_alive:                              # 永久ループ(httpd動�
             MAC.append(dev.addr)                    # 配列変数にアドレスを追加
             print(len(MAC), 'Devices found')        # 発見済みデバイス数を表示
     if time_prev + 30 < time():                     # 30秒以上経過した時
-        counter = len(MAC) * 2                      # 分当たりの発見機器数を保持
-        print(counter, 'Counts/minute')             # カウンタ値(分あたり)を表示
+        counter = len(MAC)                          # 発見機器数を保持
+        print(counter, 'Counts/30seconds')          # カウンタ値(30秒あたり)表示
         MAC = list()                                # アドレスを廃棄
         time_prev = time()                          # 現在の時間を変数に保持
 
@@ -76,15 +76,15 @@ HTTP port 80
 1 Devices found
 2 Devices found
 3 Devices found
-6 Counts/minute
+3 Counts/30seconds
 1 Devices found
 192.168.1.5 - - [17/Feb/2021 22:26:12] "GET / HTTP/1.1" 200 14
-counter = 6
+counter = 3
 2 Devices found
 --------------------------------------------------------------------------------
 pi@raspberrypi:~ $ hostname -I
 192.168.1.5 XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX
 pi@raspberrypi:~ $ curl 192.168.1.5
-counter = 6
+counter = 3
 pi@raspberrypi:~ $
 '''

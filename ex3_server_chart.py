@@ -25,7 +25,7 @@
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
-counter = 0                                         # BLEビーコン発見数(cpm)
+counter = 0                                         # BLEビーコン発見数
 
 from wsgiref.simple_server import make_server       # WSGIサーバ
 from bluepy import btle                             # bluepyからbtleを組み込む
@@ -85,7 +85,7 @@ while thread.is_alive:                              # 永久ループ(httpd動�
             MAC.append(dev.addr)                    # 配列変数にアドレスを追加
             print(len(MAC), 'Devices found')        # 発見済みデバイス数を表示
     if time_prev + 30 < time():                     # 30秒以上経過した時
-        counter = len(MAC) * 2                      # 分あたりの発見機器数を保持
-        print(counter, 'Counts/minute')             # カウンタ値(分あたり)を表示
+        counter = len(MAC)                          # 発見機器数を保持
+        print(counter, 'Counts/30seconds')          # カウンタ値(30秒あたり)表示
         MAC = list()                                # アドレスを廃棄
         time_prev = time()                          # 現在の時間を変数に保持

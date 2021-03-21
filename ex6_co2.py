@@ -33,7 +33,7 @@
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -80                                   # 最低受信強度
 sgp30 = 0x58                                        # センサSGP30のI2Cアドレス
-counter = None                                      # BLEビーコン発見数(cpm)
+counter = None                                      # BLEビーコン発見数
 co2 = None                                          # 推定CO2濃度
 tvoc = None                                         # TVOC濃度
 
@@ -99,8 +99,8 @@ while thread.is_alive:                              # 永久ループ(httpd動�
             MAC.append(dev.addr)                    # 配列変数にアドレスを追加
             print(len(MAC), 'Devices found')        # 発見済みデバイス数を表示
     if time_prev + 30 < time():                     # 30秒以上経過した時
-        counter = len(MAC) * 2                      # 分あたりの発見機器数を保持
-        print(counter, 'Counts/minute', end = ', ') # カウンタ値を表示
+        counter = len(MAC)                          # 発見機器数を保持
+        print(counter, 'Counts/30sec.', end = ', ') # カウンタ値(30秒あたり)表示
         print('CO2 = %d ppm' % co2, end = ', ')     # co2を表示
         print("TVOC= %d ppb" % tvoc)                # tvodを表示
         MAC = list()                                # アドレスを廃棄
@@ -115,16 +115,16 @@ HTTP port 80
 3 Devices found
 4 Devices found
 5 Devices found
-10 Counts/minute, CO2 = 402 ppm, TVOC= 1 ppb
+5 Counts/30sec., CO2 = 402 ppm, TVOC= 1 ppb
 1 Devices found
 192.168.1.5 - - [07/Mar/2021 18:58:20] "GET / HTTP/1.1" 200 36
-counter = 10
+counter = 5
 co2 = 402
 tvoc = 1
 2 Devices found
 3 Devices found
 192.168.1.5 - - [07/Mar/2021 18:58:30] "GET / HTTP/1.1" 200 36
-counter = 10
+counter = 5
 co2 = 464
 tvoc = 219
 
@@ -132,11 +132,11 @@ tvoc = 219
 pi@raspberrypi:~ $ hostname -I
 192.168.1.5 XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX:XXXX
 pi@raspberrypi:~ $ curl 192.168.1.5
-counter = 10
+counter = 5
 co2 = 402
 tvoc = 1
 pi@raspberrypi:~ $ curl 192.168.1.5
-counter = 10
+counter = 5
 co2 = 464
 tvoc = 219
 pi@raspberrypi:~ $

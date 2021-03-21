@@ -29,7 +29,7 @@ amdient_tag='d1'                    # データ番号d1～d8のいずれかを�
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -999                                  # 最低受信強度
-counter = None                                      # BLEビーコン発見数(cpm)
+counter = None                                      # BLEビーコン発見数
 
 from bluepy import btle                             # bluepyからbtleを組み込む
 from sys import argv                                # sysから引数取得を組み込む
@@ -58,8 +58,8 @@ while True:                                         # 永久ループ
             MAC.append(dev.addr)                    # 配列変数にアドレスを追加
             print(len(MAC), 'Devices found')        # 発見済みデバイス数を表示
     if time_prev + 30 < time():                     # 30秒以上経過した時
-        counter = len(MAC) * 2                      # 分あたりの発見機器数を保持
-        print(counter, 'Counts/minute')             # カウンタ値(分あたり)を表示
+        counter = len(MAC)                          # 発見機器数を保持
+        print(counter, 'Counts/30seconds')          # カウンタ値(30秒あたり)表示
         body[amdient_tag] = counter                 # カウンタ値をbodyへ代入
         print(body)                                 # メッセージを表示
         post = urllib.request.Request(url_s, json.dumps(body).encode(), head)
@@ -76,10 +76,10 @@ pi@raspberrypi:~/ble_scan $ sudo ./ex4_ambient.py
 1 Devices found
 2 Devices found
 3 Devices found
-6 Counts/minute
-{'writeKey': '0123456789abcdef', 'd1': 6}
+3 Counts/30seconds
+{'writeKey': '0123456789abcdef', 'd1': 3}
 1 Devices found
 2 Devices found
-4 Counts/minute
-{'writeKey': '0123456789abcdef', 'd1': 4}
+2 Counts/30seconds
+{'writeKey': '0123456789abcdef', 'd1': 2}
 '''

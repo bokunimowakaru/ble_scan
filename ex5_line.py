@@ -40,7 +40,7 @@ line_token='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 interval = 1.01                                     # 動作間隔(秒)
 target_rssi = -999                                  # 最低受信強度
-counter = None                                      # BLEビーコン発見数(cpm)
+counter = None                                      # BLEビーコン発見数
 alart_n = 3                                         # LINE送信閾値
 
 from bluepy import btle                             # bluepyからbtleを組み込む
@@ -70,12 +70,12 @@ while True:                                         # 永久ループ
             MAC.append(dev.addr)                    # 配列変数にアドレスを追加
             print(len(MAC), 'Devices found')        # 発見済みデバイス数を表示
     if time_prev + 30 < time():                     # 30秒以上経過した時
-        counter = len(MAC) * 2                      # 分あたりの発見機器数を保持
-        print(counter, 'Counts/minute')             # カウンタ値(分あたり)を表示
+        counter = len(MAC)                          # 発見機器数を保持
+        print(counter, 'Counts/30seconds')          # カウンタ値(30秒あたり)表示
         MAC = list()                                # アドレスを廃棄
         time_prev = time()                          # 現在の時間を変数に保持
         if counter >= alart_n:                      # カウンタ値が5以上のとき
-            body = 'message=密集度は ' + str(counter) + ' cpm です。'
+            body = 'message=密集度は ' + str(counter) + ' です。'
             print(body)                             # メッセージを表示
             post = urllib.request.Request(url_s, body.encode(), head)
             try:                                    # 例外処理の監視を開始
@@ -89,7 +89,7 @@ pi@raspberrypi:~/ble_scan $ sudo ./ex5_line.py
 1 Devices found
 2 Devices found
 3 Devices found
-6 Counts/minute
+3 Counts/30seconds
 message=密集度は 3 です。
 1 Devices found
 2 Devices found
@@ -98,6 +98,6 @@ message=密集度は 3 です。
 2 Devices found
 3 Devices found
 4 Devices found
-8 Counts/minute
+4 Counts/30seconds
 message=密集度は 4 です。
 '''

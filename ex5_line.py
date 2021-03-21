@@ -39,7 +39,7 @@ line_token='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
                                             # ↑ここにLINEで取得したTOKENを入力
 
 interval = 1.01                                     # 動作間隔(秒)
-target_rssi = -999                                  # 最低受信強度
+target_rssi = -80                                   # 最低受信強度
 counter = None                                      # BLEビーコン発見数
 alart_n = 5                                         # LINE送信閾値
 

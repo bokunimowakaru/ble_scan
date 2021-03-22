@@ -97,8 +97,8 @@ def wsgi_app(environ, start_response):              # HTTPアクセス受信時�
     html += '<th width=200>グラフ</th>\n'           # 「グラフ」を表示
     html += barChartHtml('Temperature', temp, 40)   # カウント値を棒グラフ化
     html += barChartHtml('Counter', counter, 10)    # カウント値を棒グラフ化
-    html += barChartHtml('CO2', co2, 1000)          # 推定CO2濃度を棒グラフ化
-    html += barChartHtml('TVOC', tvoc, 100)         # TVOC濃度を棒グラフ化
+    html += barChartHtml('CO2', co2, 2000)          # 推定CO2濃度を棒グラフ化
+    html += barChartHtml('TVOC', tvoc, 5000)        # TVOC濃度を棒グラフ化
     html += '</tr>\n</table>\n</body>\n</html>\n'   # 作表とhtmlの終了
     start_response('200 OK', [('Content-type', 'text/html; charset=utf-8')])
     return [html.encode('utf-8')]                   # 応答メッセージを返却

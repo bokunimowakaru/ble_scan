@@ -26,27 +26,6 @@ from sys import argv                                # sysから引数取得を�
 from time import sleep                              # timeからsleepを組み込む
 from getpass import getuser                         # ユーザ取得を組み込む
 
-def payval(num, bytes=1, sign=False):           # 受信データから値を抽出する
-    global val                                  # 受信データ用変数valを読み込む
-    a = 0                                       # 戻り値用変数aを定義する
-    if num < 2 or len(val) < (num - 2 + bytes) * 2:
-        print('ERROR: data length',len(val))
-        return 0
-    for i in range(0, bytes):                   # バイト数分の値を変数aに代入
-        a += (256 ** i) * int(val[(num - 2 + i) * 2 : (num - 1 + i) * 2],16)
-    if sign:                                    # 符号つきの場合
-        if a >= 2 ** (bytes * 8 - 1):           # マイナス値のとき
-            a -= 2 ** (bytes * 8)               # マイナス値へ変換
-    return a                                    # 得られた値aを応答する
-
-def printval(dict, name, n, unit):              # 受信値を表示する関数
-    value = dict.get(name)                      # 変数dict内の項目nameの値を取得
-    if value == None:                           # 項目が無かったとき
-        return                                  # 戻る
-    if type(value) is not str:                  # 値が文字列で無かったとき
-        value = round(value,n)                  # 小数点以下第n位で丸める
-    print('    ' + name + ' ' * (14 - len(name)) + '=', value, unit)    # 表示
-
 # 設定確認
 if getuser() != 'root':                             # 実行したユーザがroot以外
     print('使用方法: sudo', argv[0], '[対象MACアドレス(省略可)]...')
